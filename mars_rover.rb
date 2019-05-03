@@ -43,7 +43,7 @@ class MarsRover
       can_move?(instruction) ? move(instruction) : break
     end
 
-    position
+    puts position
   end
 
   def position
