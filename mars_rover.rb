@@ -39,11 +39,12 @@ class MarsRover
 
     return position if !valid_instructions? instructions
 
+    # Follow all of the instructions
     instructions.split('').each do |instruction|
       can_move?(instruction) ? move(instruction) : break
     end
 
-    puts position
+    position
   end
 
   def position
@@ -52,9 +53,9 @@ class MarsRover
 
   def quick_run
     set_position_and_direction(1,2,'N')
-    rove('LMLMLMLMM')
+    puts rove('LMLMLMLMM')
     set_position_and_direction(3,3,'E')
-    rove('MMRMMRMRRM')
+    puts rove('MMRMMRMRRM')
   end
 
   private
@@ -79,7 +80,9 @@ class MarsRover
   end
 
   def move(instruction)
+    # Check if instructed to turn
     if TURNS.include? instruction
+      # Set the turn adjustment based on the instruction
       adjust       = (instruction == 'L' ? -1 : 1)
       @current_dir = @directions.rotate!(adjust).first
     else
@@ -92,8 +95,6 @@ class MarsRover
         @pos_y -= 1
       when 'W'
         @pos_x -= 1
-      else
-        puts 'Invalid direction!'
       end
     end
 
@@ -108,6 +109,7 @@ class MarsRover
     true
   end
 
+  # Calculate the end point based on the next move
   def end_point
     if ['N','S'].include? current_dir
       plat_length
@@ -116,6 +118,7 @@ class MarsRover
     end
   end
 
+  # Calculate the postion based on the next move
   def next_move
     case current_dir
     when 'N'
