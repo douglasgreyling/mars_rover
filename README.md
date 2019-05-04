@@ -23,6 +23,9 @@ instructions = ['LMLMLMLMM', 'MMRMMRMRRM']
 m = MarsMission.new(5,5)
 m.config_rovers configs
 m.launch_rovers instructions
+
+=>Position: (1, 3, N).
+=>Position: (5, 1, E).
 ```
 
 ## Rspec:
