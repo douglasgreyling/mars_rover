@@ -1,23 +1,23 @@
 class MarsRover
-  attr_reader :plat_width, :plat_length, :pos_x, :pos_y, :directions, :current_dir
+  attr_reader :position
 
   DIRECTIONS = ['N', 'E', 'S', 'W']
   TURNS      = ['L', 'R']
   MOVES      = ['M']
   ACTIONS    = MOVES + TURNS
 
-  def initialize(plat_width, plat_length)
-    @plat_width  = plat_width
-    @plat_length = plat_length
-    @directions  = DIRECTIONS
+  def initialize(plateau)
+    @plateau    = plateau
+    @directions = DIRECTIONS.clone
+    @position   = { x: nil, y: nil, dir: nil }
   end
 
   def set_position_and_direction(x, y, dir)
     dir.upcase!
 
     if valid_position?(x,y) && valid_direction?(dir)
-      @pos_x = x
-      @pos_y = y
+      @position[:x] = x
+      @position[:y] = y
 
       # Set the directions arr for rotational movement 
       until @directions.first == dir do
@@ -25,13 +25,13 @@ class MarsRover
       end
     else
       # Invalid position/direction defaults to (0,0,N)
-      @pos_x = 0
-      @pos_y = 0
+      @position[:x] = 0
+      @position[:y] = 0
     end
 
-    @current_dir = @directions.first
+    @position[:dir] = @directions.first
 
-    position
+    print_position
   end
 
   def rove(instructions)
@@ -44,25 +44,25 @@ class MarsRover
       can_move?(instruction) ? move(instruction) : break
     end
 
-    position
+    @plateau.grid << xy_position
+    print_position
+
+    @position
   end
 
-  def position
-    "Position: (#{@pos_x}, #{@pos_y}, #{@current_dir})."
+  def print_position
+    puts "Position: (#{@position[:x]}, #{@position[:y]}, #{@position[:dir]})."
   end
 
-  def quick_run
-    set_position_and_direction(1,2,'N')
-    puts rove('LMLMLMLMM')
-    set_position_and_direction(3,3,'E')
-    puts rove('MMRMMRMRRM')
+  def xy_position
+    [@position[:x], @position[:y]]
   end
 
   private
 
   def valid_position?(x, y)
-    return false if x.nil? || !x.between?(0, @plat_width)
-    return false if y.nil? || !y.between?(0, @plat_length)
+    return false if x.nil? || !x.between?(0, @plateau.width)
+    return false if y.nil? || !y.between?(0, @plateau.length)
     
     true
   end
@@ -83,18 +83,18 @@ class MarsRover
     # Check if instructed to turn
     if TURNS.include? instruction
       # Set the turn adjustment based on the instruction
-      adjust       = (instruction == 'L' ? -1 : 1)
-      @current_dir = @directions.rotate!(adjust).first
+      adjust          = (instruction == 'L' ? -1 : 1)
+      @position[:dir] = @directions.rotate!(adjust).first
     else
-      case @current_dir
+      case @position[:dir]
       when 'N'
-        @pos_y += 1
+        @position[:y] += 1
       when 'E'
-        @pos_x += 1
+        @position[:x] += 1
       when 'S'
-        @pos_y -= 1
+        @position[:y] -= 1
       when 'W'
-        @pos_x -= 1
+        @position[:x] -= 1
       end
     end
 
@@ -103,7 +103,7 @@ class MarsRover
 
   def can_move?(instruction)
     if instruction == MOVES.first
-      return false unless next_move.between?(0, end_point)
+      return false unless next_move.between?(0, end_point) && next_move_not_taken?
     end
 
     true
@@ -111,24 +111,28 @@ class MarsRover
 
   # Calculate the end point based on the next move
   def end_point
-    if ['N','S'].include? current_dir
-      plat_length
-    elsif ['E', 'W'].include? current_dir
-      plat_width
+    if ['N','S'].include? @position[:dir]
+      @plateau.length
+    elsif ['E', 'W'].include? @position[:dir]
+      @plateau.width
     end
+  end
+
+  def next_move_not_taken?
+    !@plateau.grid.include? xy_position
   end
 
   # Calculate the postion based on the next move
   def next_move
-    case current_dir
+    case @position[:dir]
     when 'N'
-      @pos_y + 1
+      @position[:y] + 1
     when 'E'
-      @pos_x + 1
+      @position[:x] + 1
     when 'S'
-      @pos_y - 1
+      @position[:y] - 1
     when 'W'
-      @pos_x - 1
+      @position[:y] - 1
     end
   end
 end
