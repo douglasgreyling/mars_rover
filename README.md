@@ -30,4 +30,4 @@ m.launch_rovers instructions
 
 ## Rspec:
 
-Run `Rspec` to check that all the tests pass fine.
+Run `rspec` to check that all the tests pass fine.
