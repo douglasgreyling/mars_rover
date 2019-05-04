@@ -117,7 +117,19 @@ class MarsRover
   end
 
   def next_move_not_taken?
-    !@plateau.grid.include? xy_position
+    next_position = xy_position
+    case @position[:dir]
+    when 'N'
+      next_position[1] += 1
+    when 'E'
+      next_position[0] += 1
+    when 'S'
+      next_position[1] -= 1
+    when 'W'
+      next_position[0] -= 1
+    end
+
+    !@plateau.grid.include? next_position
   end
 
   # Calculate the postion based on the next move
@@ -130,7 +142,7 @@ class MarsRover
     when 'S'
       @position[:y] - 1
     when 'W'
-      @position[:y] - 1
+      @position[:x] - 1
     end
   end
 end

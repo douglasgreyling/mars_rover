@@ -55,7 +55,7 @@ describe MarsRover do
     expect(@plateau.grid).not_to include subject.xy_position
   end
 
-  it "should raise an error when it tries to move out of bounds" do
+  it "should stop when it tries to move out of bounds" do
     @plateau.grid = []
 
     subject.set_position_and_direction(1,2,'N')
@@ -63,5 +63,15 @@ describe MarsRover do
 
     expect(subject.position).to eq({ x: 1, y: 6, dir: 'N' })
     expect(@plateau.grid).to include subject.xy_position
+  end
+
+  it "should stop when it tries to move into a taken grid" do
+    @plateau.grid = [[1,3]]
+
+    subject.set_position_and_direction(1,2,'N')
+    subject.rove 'M'
+
+    expect(subject.position).to eq({ x: 1, y: 2, dir: 'N' })
+    expect(@plateau.grid).to eq [[1,3], [1,2]]
   end
 end
