@@ -1,23 +1,30 @@
 # Mars Rover Challenge :rocket:
 
+This is my attempt at the Google Mars Rover Code Challenge.
+You can read about the challenge here: https://code.google.com/archive/p/marsrovertechchallenge/
+
 ## Setup:
 
-Clone the repo, navigate to the directory and run `irb -r './mars_rover.rb'` to load the file into IRB.
+All you need to do is clone the repo, navigate to the directory and run `irb -r './mars_mission.rb'` to load the file into IRB.
+You might need to install Rspec or Bundler if it's not installed already.
 
-## Use:
+## How it works:
 
-Initialize the class and set the plateau by running `MarsRover.new(x,y)` where x and y are the plateau dimensions.
+Initialize the class and set the plateau by running `MarsMission.new(x,y)` where x and y are the plateau dimensions.
 
-For convenience you can run both examples as provided on Google by running `MarsRover.new(x,y).quick_run`.
+For convenience you can run both examples as provided on Google by running `MarsMission.new(5,5).quick_mission`.
 
 To run your own mission you can do the following:
 
 ```ruby
-r = MarsRover.new(5,5)
-r.set_position_and_direction(1,2,'N')
-r.rove('LMLMLMLMM')
+configs      = [[1,2,'N'], [3,3,'E']]
+instructions = ['LMLMLMLMM', 'MMRMMRMRRM']
+
+m = MarsMission.new(5,5)
+m.config_rovers configs
+m.launch_rovers instructions
 ```
 
 ## Rspec:
 
-First make sure that rspec is installed, if not then bundle it. To run all the specs: `rspec spec/mars_rover_spec.rb`.
+Run `Rspec` to check that all the tests pass fine.

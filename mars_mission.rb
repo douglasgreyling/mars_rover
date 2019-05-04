@@ -13,7 +13,7 @@ class MarsMission
   # current direction (in that order) for each rover
   def config_rovers(configs)
     configs.each do |config|
-      r = MarsRover.new(@plateau)
+      r = MarsRover.new @plateau
       r.set_position_and_direction(*config)
       rovers << r
     end
@@ -21,23 +21,16 @@ class MarsMission
 
   # Instructions must be an array of instructions
   def launch_rovers(instructions)
-    instructions.each do |instruction_set|
-      r.rove instruction_set
+    rovers.each_with_index do |rover, i|
+      rover.rove instructions[i]
     end
   end
 
   def quick_mission
     configs      = [[1,2,'N'], [3,3,'E']]
     instructions = ['LMLMLMLMM', 'MMRMMRMRRM']
-    rovers       = []
 
-    configs.each do |config|
-      r = MarsRover.new(@plateau)
-      r.set_position_and_direction(*config)
-      rovers << r
-    end
-
-    rovers.first.rove(instructions.first)
-    rovers.last.rove(instructions.last)
+    config_rovers configs
+    launch_rovers instructions
   end
 end

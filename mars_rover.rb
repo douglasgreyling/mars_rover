@@ -30,8 +30,6 @@ class MarsRover
     end
 
     @position[:dir] = @directions.first
-
-    print_position
   end
 
   def rove(instructions)
