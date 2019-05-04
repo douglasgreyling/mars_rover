@@ -39,7 +39,7 @@ describe MarsRover do
     @plateau.grid = []
 
     subject.set_position_and_direction(1,2,'N')
-    subject.rove('LMLMLMLMM')
+    subject.rove 'LMLMLMLMM'
 
     expect(subject.position).to eq({ x: 1, y: 3, dir: 'N' })
     expect(@plateau.grid).to include subject.xy_position
@@ -49,7 +49,7 @@ describe MarsRover do
     @plateau.grid = []
 
     subject.set_position_and_direction(1,2,'N')
-    subject.rove('LMLMLMLX')
+    subject.rove 'LMLMLMLX'
 
     expect(subject.position).to eq({ x: 1, y: 2, dir: 'N' })
     expect(@plateau.grid).not_to include subject.xy_position
@@ -59,7 +59,7 @@ describe MarsRover do
     @plateau.grid = []
 
     subject.set_position_and_direction(1,2,'N')
-    subject.rove('LMLMLMLMMMMM')
+    subject.rove 'LMLMLMLMMMMM'
 
     expect(subject.position).to eq({ x: 1, y: 6, dir: 'N' })
     expect(@plateau.grid).to include subject.xy_position
